@@ -128,6 +128,7 @@ body.route-app .footer{display:none!important}
 body.route-app main.route-main>section:not([hidden]){margin-bottom:0}
 .boot-landing{min-height:100vh;min-height:100svh}
 @media(max-height:760px){.boot-content{padding-top:clamp(10px,2.2vh,24px);padding-bottom:clamp(10px,2.2vh,24px)}.boot-logo{width:clamp(48px,9vh,78px);margin-bottom:8px}.boot-kicker{margin:8px 0}.boot-content h1{font-size:clamp(1.7rem,6vh,3.5rem);margin:8px 0}.boot-description{line-height:1.45;margin:8px 0}.boot-facts{margin:10px 0}.boot-footnote{margin-top:10px}}
+.boot-landing[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -487,6 +488,8 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
   'reference.html':{ids:['reference'],title:'Reference Library'}
  };
  const page=pages[route]||pages['index.html'];
+ const bootLanding=document.querySelector('.boot-landing');
+ if(bootLanding) bootLanding.hidden=route!=='index.html';
  document.querySelectorAll('main.shell > section').forEach(section=>{
    section.hidden=!page.ids.includes(section.id);
  });
