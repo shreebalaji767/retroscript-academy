@@ -640,6 +640,10 @@ function load(id){if(id==='own'){try{const d=JSON.parse(localStorage.getItem('rs
 function save(){try{localStorage.setItem('rsa-hardcore-js',JSON.stringify({code:editor.value,tests:tests.value,notes:$('#ideNotes').value,savedAt:new Date().toISOString()}));status('SAVED LOCALLY ✓')}catch{status('SAVE FAILED — DOWNLOAD A COPY')}}
 function run(withTests){
  if(running)return;
+ if(!editor.value.trim()){
+  load($('#ideExample').value||'starter');
+  if(!editor.value.trim())load('starter');
+ }
  running=true;
  $('#ideStatus').textContent=withTests?'TESTING…':'RUNNING…';
  $('#ideRunTime').textContent='RUNNING';
@@ -663,7 +667,7 @@ function run(withTests){
    try{
     await Function('console','test','assert','return (async function(){\n'+p.code+'\n;\n'+p.tests+'\n})()')(safeConsole,test,assert);
     send({lines:lines,results:results,withTests:!!p.withTests});
-   }catch(e){send({lines:lines,results:results,withTests:!!p.withTests,fatal:(e.name||'Error')+': '+(e.message||String(e))})}
+   }catch(e){send({lines:lines,results:results,withTests:!!p.withTests,fatal:(e.name||'Error')+': '+(e.message||String(e)),stack:e&&e.stack?String(e.stack):''})}
   });
  };
  frame.srcdoc='<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' \'unsafe-eval\'; connect-src \'none\'; img-src data:; style-src \'unsafe-inline\'"><script>('+sandboxRunner.toString()+')();<'+'/script>';
@@ -677,7 +681,7 @@ function run(withTests){
   running=false;
   const d=e.data.data;
   output.textContent=(d.lines||[]).join('\n')||(d.fatal?'':'Code finished with no console output.');
-  if(d.fatal)output.textContent+=(output.textContent?'\n':'')+'ERROR: '+d.fatal;
+  if(d.fatal)output.textContent+=(output.textContent?'\n':'')+'ERROR: '+d.fatal+(d.stack?'\n'+d.stack.split('\n').slice(0,4).join('\n'):'');
   $('#ideRunTime').textContent=Math.round(performance.now()-started)+' ms';
   if(withTests){
    const rs=d.results||[],pass=rs.filter(x=>x.ok).length;
