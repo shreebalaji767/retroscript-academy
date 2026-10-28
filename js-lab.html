@@ -692,8 +692,8 @@ function run(withTests){
   $('#ideSavedStatus').textContent=$('#ideStatus').textContent;
  };
  window.addEventListener('message',listener);
- document.body.appendChild(frame);
  frame.addEventListener('load',()=>{if(!done&&frame.contentWindow)frame.contentWindow.postMessage({channel:'rsa-hardcore-input',...payload},'*')},{once:true});
+ document.body.appendChild(frame);
  setTimeout(()=>{
   if(!done){
    window.removeEventListener('message',listener);frame.remove();running=false;
