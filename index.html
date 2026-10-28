@@ -479,32 +479,76 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
 
 <script>
 (function(){
- const route=(location.pathname.split('/').pop()||'index.html').toLowerCase();
- const pages={
-  'index.html':{ids:['landing'],title:'Welcome'},
-  'courses.html':{ids:['courses','lesson'],title:'Courses & Lessons'},
-  'labs.html':{ids:['lab','real-labs','playground'],title:'Real Labs'},
-  'practice.html':{ids:['practice'],title:'Practice & Quizzes'},
-  'reference.html':{ids:['reference'],title:'Reference Library'}
- };
- const page=pages[route]||pages['index.html'];
- const bootLanding=document.querySelector('.boot-landing');
- if(bootLanding) bootLanding.hidden=route!=='index.html';
- document.querySelectorAll('main.shell > section').forEach(section=>{
-   section.hidden=!page.ids.includes(section.id);
- });
- document.querySelectorAll('.topbar').forEach(el=>el.hidden=route==='index.html');
- const footer=document.querySelector('.footer');
- if(footer) footer.hidden=route==='index.html';
- document.title=page.title+' — RetroScript Academy';
- const main=document.querySelector('main.shell');
- if(main) main.classList.toggle('route-main',route!=='index.html');
- document.body.classList.toggle('route-app',route!=='index.html');
- document.querySelectorAll('#navlinks a').forEach(a=>{
-   if(new URL(a.href,location.href).pathname===location.pathname){
-     a.setAttribute('aria-current','page');
-   }
- });
+  'use strict';
+  const route=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const pages={
+    'index.html':{ids:[],title:'Welcome'},
+    'courses.html':{ids:['courses','lesson'],title:'Courses & Lessons'},
+    'labs.html':{ids:['lab','real-labs','playground'],title:'Real Labs'},
+    'practice.html':{ids:['practice'],title:'Practice & Quizzes'},
+    'reference.html':{ids:['reference'],title:'Reference Library'}
+  };
+  const isHome=route==='index.html'||route==='';
+  const page=pages[route]||pages['index.html'];
+  const landing=document.querySelector('.boot-landing');
+  if(landing) landing.hidden=!isHome;
+  document.querySelectorAll('main.shell > section').forEach(section=>{
+    section.hidden=isHome||!page.ids.includes(section.id);
+  });
+  document.querySelectorAll('.topbar').forEach(el=>{el.hidden=isHome});
+  const footer=document.querySelector('.footer');
+  if(footer) footer.hidden=isHome;
+  document.title=page.title+' — RetroScript Academy';
+  const main=document.querySelector('main.shell');
+  if(main) main.classList.toggle('route-main',!isHome);
+  document.body.classList.toggle('route-app',!isHome);
+
+  const nav=document.getElementById('navlinks');
+  const menu=document.getElementById('menuToggle');
+  function closeMenu(){
+    if(nav) nav.classList.remove('open');
+    if(menu) menu.setAttribute('aria-expanded','false');
+  }
+  if(menu&&nav){
+    menu.setAttribute('aria-controls','navlinks');
+    menu.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false');
+    menu.onclick=()=>{
+      const open=nav.classList.toggle('open');
+      menu.setAttribute('aria-expanded',String(open));
+    };
+    nav.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click',closeMenu);
+      try{
+        const target=new URL(a.href,location.href);
+        if(target.pathname===location.pathname&&(!target.hash||target.hash===location.hash)){
+          a.setAttribute('aria-current','page');
+        }else{
+          a.removeAttribute('aria-current');
+        }
+      }catch{}
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape') closeMenu();
+    });
+  }
+
+  // The welcome screen advertises Enter as a shortcut; make that shortcut work.
+  if(isHome){
+    document.addEventListener('keydown',event=>{
+      const target=event.target;
+      const typing=target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(target.tagName));
+      if(event.key==='Enter'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!typing){
+        location.href='./courses.html';
+      }
+    });
+  }else if(location.hash){
+    // Ensure hash navigation works after route sections are unhidden.
+    const targetId=decodeURIComponent(location.hash.slice(1));
+    const target=document.getElementById(targetId);
+    if(target&&!target.hidden){
+      requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+    }
+  }
 })();
 </script>
 </body></html>
