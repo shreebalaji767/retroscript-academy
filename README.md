@@ -62,3 +62,39 @@ Open `index.html` in a modern browser or serve the repository using any static l
 ## License
 
 Add a license file if you intend to grant others explicit reuse rights.
+
+
+## Expanded modern and legacy language atlas
+
+The searchable course directory includes beginner-to-advanced learning tracks for the following major scripting and automation families. The catalog is broad, but no single site can literally cover every proprietary, historical or domain-specific language ever created.
+
+### General-purpose and runtime scripting
+- JavaScript, Node.js, Deno/TypeScript, Python, PHP CLI, Ruby, Perl, Groovy, Julia, and R
+- Lua for embedded scripting and game/application configuration
+- Tcl and Expect for tooling, testing and interactive terminal automation
+
+### Shells and text-processing tools
+- Windows Command Prompt / DOS-style commands and Batch
+- PowerShell, including Windows PowerShell 5.1 versus PowerShell 7+
+- Bash, POSIX shell concepts, Zsh, Fish, KornShell (ksh), and C shell/tcsh
+- AWK and sed for stream processing
+- Makefiles and build automation
+
+### Windows and Office legacy automation
+- Microsoft JScript, VBScript, Windows Script Host (cscript/wscript), and Classic ASP
+- Visual Basic 6, VBA for Office, AutoIt, AutoHotkey v2, and AutoHotkey v1 legacy syntax
+- KiXtart and older Windows Script Host / COM automation patterns
+
+### Mac, enterprise and historical scripting
+- AppleScript and JavaScript for Automation (JXA)
+- REXX/Regina REXX and IBM z/OS TSO/E REXX
+- LotusScript, OpenVMS DCL, HyperTalk/historical scripting concepts
+- ActionScript 3 and ColdFusion/CFML legacy web scripting
+
+### Database scripting
+- SQL fundamentals, Oracle PL/SQL, and Microsoft T-SQL
+- Safe query construction, transaction concepts, permissions, and error handling
+
+Each added track provides an introductory example, data/variable practice, control-flow and reusable-code guidance, file/error exercises, and an advanced reliability/security capstone. Legacy tracks explain host/version dependencies and migration considerations. Examples are instructional: they must be run in the appropriate real runtime, and historical or platform-specific examples may need a compatible environment.
+
+**Important:** GitHub Pages is static hosting. It does not install or run Windows Script Host, VBScript, AppleScript, REXX, database engines, or other server/runtime languages for visitors. The in-browser JavaScript workshop is the only code runner built into this static site.
