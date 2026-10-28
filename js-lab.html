@@ -648,9 +648,25 @@ function run(withTests){
  const frame=document.createElement('iframe');
  frame.sandbox='allow-scripts';
  frame.style.display='none';
- const payload=JSON.stringify({code:editor.value,tests:withTests?tests.value:''}).replace(/</g,'\\u003c');
  const channel='rsa-hardcore-result';
- frame.srcdoc='<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' \'unsafe-eval\'; connect-src \'none\'; img-src data:; style-src \'unsafe-inline\'"><script>;(async()=>{const payload='+payload+';const lines=[],results=[];const send=data=>parent.postMessage({channel:"'+channel+'",data},"*");const fmt=x=>{if(typeof x==="string")return x;try{return JSON.stringify(x)}catch{return String(x)}};const console={log:(...a)=>lines.push(a.map(fmt).join(" ")),info:(...a)=>lines.push(a.map(fmt).join(" ")),warn:(...a)=>lines.push("WARN: "+a.map(fmt).join(" ")),error:(...a)=>lines.push("ERROR: "+a.map(fmt).join(" ")),assert:(ok,...a)=>results.push({name:a.map(fmt).join(" ")||"console.assert",ok:!!ok,message:ok?"":"Assertion failed"})};const assert={equal:(a,b)=>{if(!Object.is(a,b))throw Error("Expected "+fmt(b)+" but got "+fmt(a))},deepEqual:(a,b)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error("Expected "+fmt(b)+" but got "+fmt(a))},ok:v=>{if(!v)throw Error("Expected truthy value")},throws:fn=>{let yes=false;try{fn()}catch{yes=true}if(!yes)throw Error("Expected function to throw")}};const test=(name,fn)=>{try{const v=fn();if(v&&typeof v.then==="function")throw Error("Use synchronous test callbacks");results.push({name,ok:true})}catch(e){results.push({name,ok:false,message:e&&e.message||String(e)})}};try{await Function("console","test","assert","return (async()=>{\\n"+payload.code+"\\n;\\n"+payload.tests+"\\n})()")(console,test,assert);send({lines,results,withTests:'+String(withTests)+'})}catch(e){send({lines,results,withTests:'+String(withTests)+',fatal:(e.name||"Error")+": "+(e.message||String(e))})}})();<'+'/script>';
+ const payload={code:editor.value,tests:withTests?tests.value:'',withTests};
+ const sandboxRunner=function(){
+  window.addEventListener('message',async function(event){
+   const p=event.data;
+   if(!p||p.channel!=='rsa-hardcore-input')return;
+   const lines=[],results=[];
+   const send=data=>parent.postMessage({channel:'rsa-hardcore-result',data:data},'*');
+   const fmt=x=>{if(typeof x==='string')return x;try{return JSON.stringify(x)}catch(e){return String(x)}};
+   const safeConsole={log:(...a)=>lines.push(a.map(fmt).join(' ')),info:(...a)=>lines.push(a.map(fmt).join(' ')),warn:(...a)=>lines.push('WARN: '+a.map(fmt).join(' ')),error:(...a)=>lines.push('ERROR: '+a.map(fmt).join(' ')),assert:(ok,...a)=>results.push({name:a.map(fmt).join(' ')||'console.assert',ok:!!ok,message:ok?'':'Assertion failed'})};
+   const assert={equal:(a,b)=>{if(!Object.is(a,b))throw Error('Expected '+fmt(b)+' but got '+fmt(a))},deepEqual:(a,b)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error('Expected '+fmt(b)+' but got '+fmt(a))},ok:v=>{if(!v)throw Error('Expected truthy value')},throws:fn=>{let yes=false;try{fn()}catch(e){yes=true}if(!yes)throw Error('Expected function to throw')}};
+   const test=(name,fn)=>{try{const v=fn();if(v&&typeof v.then==='function')throw Error('Use synchronous test callbacks');results.push({name,ok:true})}catch(e){results.push({name,ok:false,message:e&&e.message||String(e)})}};
+   try{
+    await Function('console','test','assert','return (async function(){\n'+p.code+'\n;\n'+p.tests+'\n})()')(safeConsole,test,assert);
+    send({lines:lines,results:results,withTests:!!p.withTests});
+   }catch(e){send({lines:lines,results:results,withTests:!!p.withTests,fatal:(e.name||'Error')+': '+(e.message||String(e))})}
+  });
+ };
+ frame.srcdoc='<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' \'unsafe-eval\'; connect-src \'none\'; img-src data:; style-src \'unsafe-inline\'"><script>('+sandboxRunner.toString()+')();<'+'/script>';
  let done=false;
  const started=performance.now();
  const listener=e=>{
@@ -677,6 +693,7 @@ function run(withTests){
  };
  window.addEventListener('message',listener);
  document.body.appendChild(frame);
+ frame.addEventListener('load',()=>{if(!done&&frame.contentWindow)frame.contentWindow.postMessage({channel:'rsa-hardcore-input',...payload},'*')},{once:true});
  setTimeout(()=>{
   if(!done){
    window.removeEventListener('message',listener);frame.remove();running=false;
