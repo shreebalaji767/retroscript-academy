@@ -98,3 +98,14 @@ The searchable course directory includes beginner-to-advanced learning tracks fo
 Each added track provides an introductory example, data/variable practice, control-flow and reusable-code guidance, file/error exercises, and an advanced reliability/security capstone. Legacy tracks explain host/version dependencies and migration considerations. Examples are instructional: they must be run in the appropriate real runtime, and historical or platform-specific examples may need a compatible environment.
 
 **Important:** GitHub Pages is static hosting. It does not install or run Windows Script Host, VBScript, AppleScript, REXX, database engines, or other server/runtime languages for visitors. The in-browser JavaScript workshop is the only code runner built into this static site.
+
+## Real-runtime lab bench
+
+The **Real language labs** section in the site provides a language selector, editable starter source, a source-file download button, reset/copy controls, runtime-specific run instructions, and official documentation links. It uses the course's example when available; the starter is source code, not fabricated console output.
+
+- JavaScript can run in the site's isolated browser playground.
+- Other tracks require the actual compatible interpreter, shell, IDE, database engine, operating system, or legacy host named in the lab instructions.
+- The lab bench downloads source files for local execution. It does not claim that a static GitHub Pages site can execute every language server-side.
+- Online compiler providers, where used independently by learners, may not support every legacy language or host-specific feature. For dependable legacy practice, use a compatible local/virtual machine or an authorized institutional environment.
+- The downloadable source is generated in the browser and does not require an account, paid API, or backend.
+
