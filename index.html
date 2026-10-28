@@ -173,108 +173,95 @@ const starterCode='const name = "learner";\nconsole.log("Hello, " + name + "!");
 /* Expanded real teaching curriculum: concepts, worked examples, exercises and safety notes. */
 const expandedLessons={
 dos:[
-{title:"Your first real command session",level:"LEVEL 0",sub:"Run commands in Windows Command Prompt and understand the result.",body:'<p>A command line is a text interface to an operating system. The <em>shell</em> reads your command, interprets its arguments, and asks the operating system to perform an action. The prompt is not part of the command.</p><h4>Worked example</h4><pre><code>cd
+{title:"Run commands on a real Windows system",level:"LEVEL 0",sub:"Learn the prompt, current directory, folders and files.",body:\`<p>A command line reads commands and asks the operating system to perform actions. The prompt shows context; type only the command after the prompt.</p><pre><code>cd
 dir
 mkdir Practice
 cd Practice
 echo Hello&gt;hello.txt
-type hello.txt</code></pre><p><code>cd</code> displays or changes the current directory; <code>dir</code> lists entries; <code>mkdir</code> creates a directory; <code>&gt;</code> redirects output into a file; <code>type</code> displays a text file. Run these in a practice directory on your own Windows machine.</p><h4>Check your understanding</h4><p>Before running the commands, predict what <code>dir</code> will show after the file is created. Then run it and compare your prediction.</p>'},
-{title:"Paths, quoting and safe file operations",level:"BEGINNER",sub:"Know exactly which location a command will affect.",body:'<p>An absolute path identifies a location from a drive or root, for example <code>C:\\Users\\Public\\notes.txt</code>. A relative path is resolved from the current directory, such as <code>notes.txt</code> or <code>..\\notes.txt</code>. If a path contains spaces, quote it.</p><pre><code>cd
-mkdir "Practice Files"
+type hello.txt
+dir</code></pre><p><code>cd</code> shows or changes the current directory, <code>dir</code> lists entries, <code>mkdir</code> creates a directory, <code>&gt;</code> redirects output into a file, and <code>type</code> reads a text file. This is modern Windows Command Prompt, not a perfect copy of original MS-DOS.</p><p><strong>Practice:</strong> predict what the last <code>dir</code> will show before you run the commands. Use a folder you created for practice.</p>\`},
+{title:"Paths, wildcards and redirection",level:"BEGINNER",sub:"Target the correct files and understand command output.",body:\`<p>An absolute path starts from a drive or root; a relative path is interpreted from the current directory. Quote paths containing spaces.</p><pre><code>mkdir "Practice Files"
 cd "Practice Files"
-echo Sample&gt;"my notes.txt"
-type "my notes.txt"</code></pre><p><strong>Why quotes matter:</strong> without quotes, many command interpreters treat spaces as argument separators. <code>*</code> and <code>?</code> are wildcards in many file commands; broad deletion patterns can affect many files.</p><p><strong>Exercise:</strong> create two text files, list them, display one, and navigate back to the parent folder. Do not experiment with <code>DEL</code> or recursive removal on important folders.</p>'},
-{title:"Understand exit codes and redirection",level:"INTERMEDIATE",sub:"Capture output and detect whether a command succeeded.",body:'<p>Many command-line programs report a numeric exit code. In Windows Command Prompt, <code>ERRORLEVEL</code> can be tested with conditional syntax; in Bash, the most recent exit status is available as <code>$?</code>. Conventionally, zero means success and non-zero means some kind of failure, although a program defines its own meanings.</p><pre><code>dir &gt; listing.txt
-type listing.txt
-dir missing-folder
-echo %ERRORLEVEL%</code></pre><p><code>&gt;</code> replaces a destination file, while <code>&gt;&gt;</code> appends. The last command's exit status is what you inspect, so do not insert another command before checking it.</p><p><strong>Exercise:</strong> redirect a directory listing to a new file, append a second listing, and compare the file contents. Explain why the second command uses <code>&gt;&gt;</code>.</p>'}
+echo First line&gt;notes.txt
+echo Second line&gt;&gt;notes.txt
+type notes.txt
+cd ..</code></pre><p><code>&gt;</code> replaces a file; <code>&gt;&gt;</code> appends. Wildcards such as <code>*.txt</code> may match multiple files, so inspect matches before using commands that modify or delete files.</p><p><strong>Practice:</strong> explain why the second echo uses <code>&gt;&gt;</code>, then list the files in your practice folder.</p>\`}
 ],
 batch:[
-{title:"Batch variables and expansion",level:"BEGINNER",sub:"Write predictable .bat scripts and understand when variables expand.",body:'<p>A Batch file is a sequence of commands interpreted by <code>cmd.exe</code>. Save this as <code>greeting.bat</code> using a plain-text editor:</p><pre><code>@echo off
+{title:"Write and run your first Batch file",level:"BEGINNER",sub:"A .bat file is plain text interpreted by cmd.exe.",body:\`<p>Create <code>greeting.bat</code> in a plain-text editor, save it in a practice folder, then run it from Command Prompt.</p><pre><code>@echo off
 set "learner=Student"
 echo Hello, %learner%!
-pause</code></pre><p><code>@echo off</code> hides command echoing; <code>set "name=value"</code> avoids accidental trailing spaces; <code>%learner%</code> expands the variable. The file must be saved as <code>.bat</code>, not <code>.bat.txt</code>.</p><p><strong>Exercise:</strong> add a second variable called <code>course</code> and print both variables. Then deliberately misspell one variable name and observe the result.</p>'},
-{title:"Arguments, IF and exit codes",level:"INTERMEDIATE",sub:"Make scripts respond to inputs and failures.",body:'<p>Batch arguments such as <code>%1</code> and <code>%2</code> refer to the first and second command-line arguments. <code>IF</code> selects a branch, while <code>EXIT /B</code> can return an exit code from a batch script.</p><pre><code>@echo off
+pause</code></pre><p><code>@echo off</code> hides command echoing. <code>set "name=value"</code> avoids trailing spaces in the value. <code>%learner%</code> expands the variable. Make sure the file is not accidentally saved as <code>greeting.bat.txt</code>.</p><p><strong>Practice:</strong> add a second variable and print it. Predict the output before running the file.</p>\`},
+{title:"Arguments, IF and FOR",level:"INTERMEDIATE",sub:"Give scripts inputs and repeat work safely.",body:\`<p><code>%1</code> represents the first command-line argument. <code>IF</code> chooses a branch; <code>FOR</code> repeats commands over a set of items.</p><pre><code>@echo off
 if "%~1"=="" (
   echo Usage: greet.bat NAME
   exit /b 2
 )
 echo Hello, %~1
-exit /b 0</code></pre><p>Run it as <code>greet.bat Asha</code>. The <code>%~1</code> form removes surrounding quotes from the argument. Quoting comparisons helps when arguments contain spaces; batch parsing rules are subtle, so test edge cases.</p><p><strong>Exercise:</strong> run the script with and without a name. Explain why it returns code 2 when the argument is missing.</p>'},
-{title:"FOR loops and safe automation",level:"ADVANCED",sub:"Automate repeated tasks without risking user data.",body:'<p>A <code>FOR</code> loop repeats a command for each item in a set. Inside a batch file, the loop variable uses two percent signs.</p><pre><code>@echo off
-for %%F in (*.txt) do (
-  echo Found text file: %%F
-)</code></pre><p>This example only prints names; it does not alter files. Start automation with read-only reporting. Before adding copy, move or delete operations, define the target directory explicitly and test with disposable sample files.</p><p><strong>Exercise:</strong> create three harmless <code>.txt</code> files in a test folder and confirm that each name is printed once. Then explain what happens if no matching files exist.</p>'}
+for %%F in (*.txt) do echo Found: %%F
+exit /b 0</code></pre><p>Run with a harmless name argument. In a batch file, the FOR variable uses two percent signs. Exit code zero conventionally means success; non-zero signals a problem.</p><p><strong>Practice:</strong> run with and without a name and explain why the first branch exits early.</p>\`}
 ],
 js:[
-{title:"Types, equality and truthiness",level:"BEGINNER",sub:"Understand values before writing complex logic.",body:'<p>JavaScript values include strings, numbers, booleans, <code>null</code>, <code>undefined</code>, objects and symbols. A variable name refers to a value; <code>const</code> prevents reassignment of the binding, while <code>let</code> allows reassignment.</p><pre><code>const ageText = "18";
-const ageNumber = Number(ageText);
-console.log(typeof ageText);   // "string"
-console.log(typeof ageNumber); // "number"
-console.log(ageNumber === 18); // true</code></pre><p><code>===</code> compares without implicit type conversion and is usually the clearest default. Truthy and falsy values affect conditions; examples of falsy values include <code>false</code>, <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code> and <code>NaN</code>.</p><p><strong>Exercise:</strong> change <code>ageText</code> to <code>"18 years"</code>. Predict and then inspect what <code>Number()</code> returns and why the comparison changes.</p>'},
-{title:"Functions, scope and return values",level:"INTERMEDIATE",sub:"Separate reusable logic from the code that calls it.",body:'<p>A function can receive parameters, perform work, and return a result. <code>return</code> sends a value back to the caller; <code>console.log</code> only prints information and does not return that information to the caller.</p><pre><code>function addTax(price, rate) {
+{title:"Types, equality and truthiness",level:"BEGINNER",sub:"Understand values and comparisons.",body:\`<p>JavaScript has strings, numbers, booleans, objects, <code>null</code> and <code>undefined</code>. <code>const</code> prevents reassignment of a binding; <code>let</code> permits reassignment. Prefer strict equality, <code>===</code>, for predictable comparisons.</p><pre><code>const textAge = "18";
+const numberAge = Number(textAge);
+console.log(typeof textAge);
+console.log(typeof numberAge);
+console.log(numberAge === 18);</code></pre><p><code>Number("18")</code> converts the string to a number. Try changing the text to a non-numeric phrase and inspect the result.</p><p><strong>Practice:</strong> predict each output, run the example, and explain the difference between a string and a number.</p>\`},
+{title:"Functions, arrays and promises",level:"INTERMEDIATE",sub:"Build reusable code and process collections.",body:\`<p>Functions package reusable behavior. A return value is different from printing a value. Arrays hold ordered data; <code>map</code> transforms items and <code>filter</code> selects items.</p><pre><code>function addTax(price, rate) {
   return price + price * rate;
 }
-const total = addTax(100, 0.05);
-console.log(total); // 105</code></pre><p>Parameters are local names inside the function. A function that reaches its end without returning a value returns <code>undefined</code>. Prefer small functions with clear inputs and outputs.</p><p><strong>Exercise:</strong> write a <code>toCelsius(fahrenheit)</code> function that returns <code>(fahrenheit - 32) * 5 / 9</code>. Call it with 32 and 212 and explain the results.</p>'},
-{title:"Arrays, objects and asynchronous work",level:"ADVANCED",sub:"Model data and understand why async functions return promises.",body:'<p>Arrays store ordered collections; objects group values under named properties. <code>map</code> transforms each array item into a new array, while <code>filter</code> keeps items that satisfy a condition.</p><pre><code>const scores = [45, 82, 67, 91];
-const passing = scores.filter(score =&gt; score &gt;= 60);
-const labels = passing.map(score =&gt; `Score: ${score}`);
-console.log(labels);</code></pre><p>A Promise represents a result that may become available later. An <code>async</code> function always returns a Promise; <code>await</code> pauses that function until the awaited result settles. Handle failures with <code>try/catch</code>.</p><pre><code>async function main() {
-  try {
-    const response = await Promise.resolve("ready");
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-}
-main();</code></pre><p><strong>Exercise:</strong> filter scores below 70, then make a Promise reject and handle the error without an unhandled rejection.</p>'}
+const scores = [45, 82, 67, 91];
+console.log(addTax(100, 0.05));
+console.log(scores.filter(score =&gt; score &gt;= 60));</code></pre><p>A Promise represents a result that may arrive later. An <code>async</code> function returns a Promise, and <code>await</code> waits for it inside that function. Use <code>try/catch</code> to handle failures.</p><p><strong>Practice:</strong> write a function that converts Fahrenheit to Celsius and test it with 32 and 212.</p>\`}
 ],
 jscript:[
-{title:"JScript versus JavaScript",level:"INTERMEDIATE",sub:"Learn the dialect and host APIs used by Windows Script Host.",body:'<p>JScript is Microsoft’s legacy ECMAScript implementation used by older Windows environments. The language resembles JavaScript, but the available APIs depend on the host. Browser APIs such as <code>document</code> are not automatically available in Windows Script Host.</p><pre><code>// Save as hello.js for Windows Script Host
-WScript.Echo("Hello from JScript");</code></pre><p>On a compatible Windows system, <code>cscript //nologo hello.js</code> runs in a console host and <code>wscript hello.js</code> uses the Windows Script Host GUI host. Modern JavaScript features may not be supported by older JScript engines.</p><p><strong>Exercise:</strong> explain why <code>console.log()</code> and <code>WScript.Echo()</code> are not interchangeable in every host.</p>'},
-{title:"Arguments, objects and legacy automation",level:"ADVANCED",sub:"Read old scripts safely and identify host-specific behavior.",body:'<p>Windows Script Host exposes script arguments through <code>WScript.Arguments</code>. JScript can create COM objects in environments that permit it, but the object’s interface and security permissions determine what it can do.</p><pre><code>for (var i = 0; i &lt; WScript.Arguments.length; i++) {
+{title:"JScript and Windows Script Host",level:"INTERMEDIATE",sub:"Understand the language and the host that provides its APIs.",body:\`<p>Microsoft JScript is a legacy ECMAScript implementation. Windows Script Host provides host-specific objects; browser objects such as <code>document</code> are not automatically present.</p><pre><code>// hello.js
+WScript.Echo("Hello from JScript");</code></pre><p>On a compatible Windows environment, <code>cscript //nologo hello.js</code> uses a console host. Older JScript engines may not support modern JavaScript syntax.</p><p><strong>Practice:</strong> explain why <code>WScript.Echo</code> depends on the host and why a browser JavaScript example may not run unchanged.</p>\`},
+{title:"Arguments and safe legacy automation",level:"ADVANCED",sub:"Inspect scripts before allowing them to access system resources.",body:\`<p>Windows Script Host exposes command-line arguments through <code>WScript.Arguments</code>. Legacy scripts may automate files, registry settings or other applications, depending on permissions and installed components.</p><pre><code>for (var i = 0; i &lt; WScript.Arguments.length; i++) {
   WScript.Echo("Argument " + i + ": " + WScript.Arguments.Item(i));
-}</code></pre><p>Inspect a script before running it. Legacy automation can modify files, registry settings, Office documents or system configuration. Use a disposable test environment for unfamiliar code.</p><p><strong>Exercise:</strong> save the example and run it with two harmless arguments on a compatible host. Document the exact command and output.</p>'}
+}</code></pre><p>Review source code before running it. Use a controlled machine you own and harmless arguments. Do not execute unfamiliar scripts that alter system settings or data.</p><p><strong>Practice:</strong> on a compatible host, pass two harmless arguments and record the output.</p>\`}
 ],
 vbs:[
-{title:"VBScript procedures and scope",level:"INTERMEDIATE",sub:"Separate reusable subroutines from functions that return values.",body:'<p>VBScript uses <code>Sub</code> for a procedure that does not return a value and <code>Function</code> for a function. Assigning a value to the function name sets its return value.</p><pre><code>Function AddTax(price, rate)
-  AddTax = price + (price * rate)
+{title:"VBScript variables, functions and loops",level:"INTERMEDIATE",sub:"Read common VBScript structures.",body:\`<p>VBScript uses <code>Dim</code> to declare variables, <code>Function</code> for a function that returns a value, and <code>For...Next</code> for counted loops.</p><pre><code>Function DoubleValue(number)
+  DoubleValue = number * 2
 End Function
 
-WScript.Echo AddTax(100, 0.05)</code></pre><p>VBScript uses <code>Set</code> for object references, while ordinary values are assigned without it. Its syntax, type conversion and error-handling model differ from JavaScript.</p><p><strong>Exercise:</strong> write a function that doubles a number, call it with 7, and state what the output should be before running it on a compatible legacy Windows host.</p>'},
-{title:"Arrays, files and legacy safety",level:"ADVANCED",sub:"Understand common maintenance patterns without blindly executing them.",body:'<p>VBScript arrays are commonly created with <code>Dim items(2)</code> for a fixed upper bound or with <code>Array("red", "green")</code>. Older scripts often use the <code>Scripting.FileSystemObject</code> COM component for file operations.</p><pre><code>Dim items, item
+Dim i
+For i = 1 To 3
+  WScript.Echo DoubleValue(i)
+Next</code></pre><p>Assigning to the function name sets its return value. VBScript syntax differs from JavaScript and depends on a compatible Windows Script Host environment.</p><p><strong>Practice:</strong> predict the three output lines and change the loop to run four times.</p>\`},
+{title:"Legacy file scripting and safety",level:"ADVANCED",sub:"Understand file automation without blindly executing it.",body:\`<p>Older VBScript code often uses the <code>Scripting.FileSystemObject</code> COM component for file operations. Such APIs can affect real files, so always identify the target path and intended effect before running a script.</p><pre><code>Dim items, item
 items = Array("red", "green", "blue")
 For Each item In items
   WScript.Echo item
-Next</code></pre><p>This example only prints values. File APIs can create, overwrite or delete real data; understand the target path and operation before executing any file-management code. VBScript is deprecated in modern Windows and is mainly relevant to legacy maintenance.</p><p><strong>Exercise:</strong> add one item to the array and predict the number of output lines.</p>'}
+Next</code></pre><p>This example only prints array values. VBScript is deprecated in modern Windows and may be disabled or removed depending on version and configuration.</p><p><strong>Practice:</strong> add an item to the array and predict the number of output lines.</p>\`}
 ],
 ps:[
-{title:"Objects and the PowerShell pipeline",level:"INTERMEDIATE",sub:"PowerShell passes objects between commands.",body:'<p>Unlike classic text-oriented shells, PowerShell pipelines commonly pass .NET objects with properties and methods. The pipeline operator <code>|</code> sends each result to the next command.</p><pre><code>Get-Process |
-  Select-Object -First 5 Name, Id, CPU</code></pre><p><code>Select-Object</code> chooses properties; it does not merely cut characters from a line of text. Discover commands with <code>Get-Command</code> and read help with <code>Get-Help Get-Process</code>.</p><p><strong>Exercise:</strong> list five processes, select only their names, and explain the difference between a process object and its displayed text.</p>'},
-{title:"Functions, parameters and safe file practice",level:"ADVANCED",sub:"Build reusable scripts with explicit inputs.",body:'<p>PowerShell functions can accept named parameters and return objects to the pipeline. Start with read-only commands, use explicit paths, and inspect help before any command that changes system state.</p><pre><code>function Get-Greeting {
+{title:"PowerShell objects and pipelines",level:"INTERMEDIATE",sub:"Pass structured objects between commands.",body:\`<p>PowerShell commands commonly emit objects with properties, rather than only lines of text. The pipeline operator <code>|</code> passes output to another command.</p><pre><code>Get-Process |
+  Select-Object -First 5 Name, Id, CPU</code></pre><p><code>Select-Object</code> selects properties. Use <code>Get-Command</code> to discover commands and <code>Get-Help Get-Process</code> to read help. Start with read-only commands.</p><p><strong>Practice:</strong> select only process names and explain the difference between an object and its displayed representation.</p>\`},
+{title:"Functions and parameters",level:"ADVANCED",sub:"Make reusable scripts with explicit inputs.",body:\`<p>PowerShell functions can declare named parameters and return objects to the pipeline.</p><pre><code>function Get-Greeting {
   param([string]$Name = "Learner")
   "Hello, $Name"
 }
-Get-Greeting -Name "Asha"</code></pre><p>PowerShell execution policy is not a security boundary by itself. Never run downloaded scripts blindly or elevate privileges just to make a lesson work.</p><p><strong>Exercise:</strong> call the function without a name and with a name containing a space. Explain the default parameter and quoting.</p>'}
+Get-Greeting -Name "Asha Rao"</code></pre><p>The parameter has a default value, and quotes preserve the name as one string. Do not run scripts with elevated privileges unless required and understood.</p><p><strong>Practice:</strong> call the function with and without a name and explain the default parameter.</p>\`}
 ],
 bash:[
-{title:"Quoting, variables and exit status",level:"BEGINNER",sub:"Avoid common shell bugs caused by spaces and expansion.",body:'<p>Bash variables are assigned without spaces around <code>=</code>. Use <code>$name</code> to expand a variable, and quote expansions as <code>"$name"</code> when they represent one argument. Single quotes preserve literal text; double quotes allow variable expansion.</p><pre><code>name="Asha Rao"
-printf 'Hello, %s\n' "$name"
+{title:"Variables, quoting and exit status",level:"BEGINNER",sub:"Handle spaces and command results correctly.",body:\`<p>In Bash, variable assignment has no spaces around <code>=</code>. Single quotes preserve literal text; double quotes allow expansion. Quote variable expansions to keep a value containing spaces as one argument.</p><pre><code>name="Asha Rao"
+printf 'Hello, %s\\\\n' "$name"
 test -f notes.txt
-printf 'exit status: %s\n' "$?"</code></pre><p><code>test -f</code> checks whether a regular file exists. <code>$?</code> is the previous command's exit status, so check it immediately.</p><p><strong>Exercise:</strong> set a variable to a value containing spaces, print it safely, and explain what could happen if you omit the quotes.</p>'},
-{title:"Pipes, redirection and robust scripts",level:"ADVANCED",sub:"Combine tools while handling failures deliberately.",body:'<p>A pipe sends one command’s standard output to another command’s standard input. Redirection writes output to files; <code>&gt;</code> overwrites while <code>&gt;&gt;</code> appends.</p><pre><code>printf '%s\n' apple apricot berry &gt; fruits.txt
+printf 'status: %s\\\\n' "$?"</code></pre><p><code>$?</code> contains the previous command's exit status, so inspect it before running another command. A zero status conventionally means success.</p><p><strong>Practice:</strong> remove the quotes around <code>$name</code>, compare the behavior, then restore them.</p>\`},
+{title:"Pipes, redirection and failure handling",level:"ADVANCED",sub:"Combine small tools and reason about failures.",body:\`<p>A pipe sends one command's standard output to another command's standard input. <code>&gt;</code> overwrites a file; <code>&gt;&gt;</code> appends.</p><pre><code>printf '%s\\\\n' apple apricot berry &gt; fruits.txt
 grep '^a' fruits.txt
-wc -l &lt; fruits.txt</code></pre><p>For scripts, consider <code>set -o pipefail</code> when a pipeline should fail if an earlier command fails. <code>set -e</code> has nuanced behavior; do not add it without understanding the contexts where errors are or are not fatal.</p><p><strong>Exercise:</strong> add a fourth fruit, filter words beginning with <code>b</code>, and explain the role of each command.</p>'}
+wc -l &lt; fruits.txt</code></pre><p>For robust scripts, understand pipeline exit status and options such as <code>set -o pipefail</code>. Do not add strict-mode options without learning their edge cases.</p><p><strong>Practice:</strong> add another fruit and change the grep pattern to match words beginning with b.</p>\`}
 ],
 python:[
-{title:"Conditions, loops and collections",level:"BEGINNER",sub:"Use indentation to express control flow.",body:'<p>Python uses indentation to group statements. A list is ordered and mutable; a dictionary maps keys to values. <code>for</code> iterates over items, and <code>if</code>/<code>elif</code>/<code>else</code> choose a path.</p><pre><code>scores = [45, 82, 67, 91]
+{title:"Conditions, loops and collections",level:"BEGINNER",sub:"Use indentation to express logic.",body:\`<p>Python uses indentation to group statements. Lists are ordered collections; dictionaries map keys to values. Conditions select a path and loops repeat work.</p><pre><code>scores = [45, 82, 67, 91]
 for score in scores:
     if score &gt;= 60:
         print(score, "pass")
     else:
-        print(score, "review")</code></pre><p>The comparison <code>&gt;=</code> means greater than or equal to. Python does not require braces, but indentation must be consistent.</p><p><strong>Exercise:</strong> add a score of 60 and a score of 59. Predict which branch each takes.</p>'},
-{title:"Files, exceptions and reusable functions",level:"INTERMEDIATE",sub:"Read files deliberately and handle missing input.",body:'<p>Use <code>with open(...)</code> so files are closed automatically. Specify an encoding for predictable text handling. Catch the specific exception you expect rather than hiding every possible error.</p><pre><code>from pathlib import Path
+        print(score, "review")</code></pre><p>The comparison <code>&gt;=</code> means greater than or equal to. Indentation is part of Python's syntax, not decoration.</p><p><strong>Practice:</strong> add scores 60 and 59 and predict which branch each takes.</p>\`},
+{title:"Files, exceptions and tests",level:"INTERMEDIATE",sub:"Read files deliberately and handle expected failures.",body:\`<p>The <code>with</code> statement manages a file resource, while <code>try/except</code> handles a specific error. Use an explicit encoding for predictable text handling.</p><pre><code>from pathlib import Path
 
 path = Path("notes.txt")
 try:
@@ -282,28 +269,22 @@ try:
 except FileNotFoundError:
     print("Create notes.txt first.")
 else:
-    print(text)</code></pre><p>This example reads a file and does not change it. The path is relative to the current working directory. Reusable functions should have clear inputs, outputs and documented assumptions.</p><p><strong>Exercise:</strong> create a text file with two lines, run the program, then rename the file and explain the handled error.</p>'},
-{title:"Modules, virtual environments and testing",level:"ADVANCED",sub:"Organize real projects reproducibly.",body:'<p>Modules separate code into files; packages group modules. A virtual environment isolates project dependencies from other Python projects. From a terminal, create one with <code>python -m venv .venv</code>, then activate it using the instructions for your operating system.</p><pre><code>def is_even(number):
-    return number % 2 == 0
-
-assert is_even(4) is True
-assert is_even(5) is False
-print("Basic checks passed")</code></pre><p>Assertions are useful for learning and simple checks; production test suites should use a test framework and cover edge cases. Avoid installing packages you do not trust.</p><p><strong>Exercise:</strong> test 0, a negative even number and an odd number. Explain why these cases matter.</p>'}
+    print(text)</code></pre><p>The path is relative to the working directory. This example reads but does not change the file.</p><p><strong>Practice:</strong> run it with and without the file and explain the different outcomes.</p>\`}
 ],
 php:[
-{title:"PHP execution model and variables",level:"BEGINNER",sub:"Know what runs on the server and what reaches the browser.",body:'<p>PHP code is executed by a PHP runtime, commonly on a server. A static GitHub Pages site cannot execute PHP. A PHP server processes the source and sends its output—often HTML—to the browser; the browser normally does not receive the PHP source itself.</p><pre><code>&lt;?php
+{title:"PHP variables and runtime",level:"BEGINNER",sub:"Know what executes on the server and what reaches the browser.",body:\`<p>PHP needs a PHP runtime. GitHub Pages cannot execute PHP. A PHP-enabled server processes the source and sends the resulting output to the browser.</p><pre><code>&lt;?php
 $name = "Learner";
 echo "Hello, " . $name;
-?&gt;</code></pre><p>PHP variables begin with <code>$</code>, and the dot operator concatenates strings. Save this as <code>hello.php</code> and run it only in a PHP-enabled environment.</p><p><strong>Exercise:</strong> change the name and concatenate a second string. Explain why opening the file directly in a browser is not equivalent to running PHP.</p>'},
-{title:"Input validation and safe output",level:"INTERMEDIATE",sub:"Treat input as untrusted and escape output for its context.",body:'<p>Server-side programs must validate input even if the browser also validates it. When displaying user-supplied text in HTML, escape it for the output context. Never concatenate untrusted input into SQL queries; use parameterized queries.</p><pre><code>&lt;?php
-$name = $_GET['name'] ?? 'Learner';
-$safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+?&gt;</code></pre><p>PHP variables begin with <code>$</code>; the dot operator concatenates strings. Opening a PHP source file directly in a browser is not the same as running it.</p><p><strong>Practice:</strong> change the name and explain which runtime must process the file.</p>\`},
+{title:"Input validation and output escaping",level:"INTERMEDIATE",sub:"Treat input as untrusted.",body:\`<p>Validate input on the server. When displaying user-supplied text in HTML, escape it for the output context; for database queries, use parameterized statements rather than concatenating input.</p><pre><code>&lt;?php
+$name = $_GET["name"] ?? "Learner";
+$safeName = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
 echo "Hello, " . $safeName;
-?&gt;</code></pre><p>This example demonstrates HTML escaping, not complete application security. Production forms also need appropriate validation, error handling, privacy protections and secure database access.</p><p><strong>Exercise:</strong> test a name containing <code>&lt;script&gt;</code> and explain why escaping changes how the browser interprets it.</p>'}
+?&gt;</code></pre><p>HTML escaping is one part of security, not a complete security system. Production applications also need validation, appropriate error handling and privacy protections.</p><p><strong>Practice:</strong> test a name containing angle brackets and explain why escaping changes how the browser interprets it.</p>\`}
 ],
 more:[
-{title:"Choosing a scripting language",level:"INTERMEDIATE",sub:"Match the runtime and ecosystem to the task.",body:'<p>There is no single best scripting language for every job. Bash is common for Unix-like command composition; PowerShell is strong for Windows administration and object pipelines; Python is widely used for general automation; JavaScript runs in browsers and server runtimes; Perl is known for text processing; Ruby emphasizes expressive scripting; Lua is often embedded in applications; Tcl appears in specialized automation.</p><p>SQL is a query language rather than a general-purpose shell, though SQL scripts automate database tasks. AppleScript targets Apple application automation. JScript and VBScript are legacy technologies relevant to older Windows systems.</p><p><strong>Decision checklist:</strong> identify the target operating system, runtime availability, input/output format, security boundaries, deployment model and maintenance needs before choosing a language.</p><p><strong>Exercise:</strong> choose a language for (1) renaming files on Linux, (2) reporting Windows processes, (3) transforming JSON data, and (4) querying a database. Explain your choices.</p>'},
-{title:"Debugging and reading documentation",level:"ADVANCED",sub:"Turn error messages into a repeatable problem-solving process.",body:'<p>When a script fails, reduce the problem to the smallest reproducible example. Read the complete error message, identify the file and line, inspect input types and paths, and check the runtime version. Consult the official language documentation for syntax and platform behavior.</p><p>Distinguish syntax errors, runtime errors, incorrect assumptions and environment errors. Add small checks around assumptions, but avoid printing passwords, tokens or sensitive data in logs.</p><p><strong>Exercise:</strong> intentionally misspell a variable or file path in one language you have studied. Capture the error, explain its cause, fix it, and record how you verified the correction.</p>'}
+{title:"Choose a language for the job",level:"INTERMEDIATE",sub:"Match runtime, platform and ecosystem to the task.",body:\`<p>Bash is common for Unix-like shell composition; PowerShell is strong for Windows administration and object pipelines; Python supports general automation; JavaScript runs in browsers and server runtimes; Perl is known for text processing; Ruby emphasizes expressive scripting; Lua is often embedded; Tcl appears in specialized automation.</p><p>SQL is a query language used to work with databases, not a general-purpose shell. AppleScript targets Apple application automation. JScript and VBScript are legacy technologies.</p><p><strong>Practice:</strong> choose a language for reporting Windows processes, transforming JSON, renaming Linux files and querying a database. Explain each choice.</p>\`},
+{title:"Debugging and documentation",level:"ADVANCED",sub:"Use errors as evidence instead of guessing.",body:\`<p>Reduce a failure to the smallest reproducible example. Read the full error, identify the file and line, inspect types and paths, and check the runtime version. Consult official documentation for platform-specific behavior.</p><p>Distinguish syntax errors, runtime errors, incorrect assumptions and environment errors. Do not print passwords or tokens into logs.</p><p><strong>Practice:</strong> introduce a harmless typo, read the error, fix it, and record how you verified the fix.</p>\`}
 ]
 };
 for (const [id, extra] of Object.entries(expandedLessons)) lessons[id].push(...extra);
