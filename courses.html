@@ -480,7 +480,8 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
 <script>
 (function(){
   'use strict';
-  const route=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const segment=location.pathname.split('/').pop().toLowerCase();
+  const route=segment||'index.html';
   const pages={
     'index.html':{ids:[],title:'Welcome'},
     'courses.html':{ids:['courses','lesson'],title:'Courses & Lessons'},
@@ -488,7 +489,7 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
     'practice.html':{ids:['practice'],title:'Practice & Quizzes'},
     'reference.html':{ids:['reference'],title:'Reference Library'}
   };
-  const isHome=route==='index.html'||route==='';
+  const isHome=!segment||route==='index.html'||!route.includes('.');
   const page=pages[route]||pages['index.html'];
   const landing=document.querySelector('.boot-landing');
   if(landing) landing.hidden=!isHome;
