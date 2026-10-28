@@ -71,7 +71,28 @@ const badgeList=[['first-run','▶','First Run','Run your first JavaScript progr
 function awardBadges(){const checks={'first-run':state.ran,'solver':state.solved.length>=1,'debugger':state.bugs.length>=1,'builder':state.projects.length>=1,'streak':state.campaign.length>=1,'allrounder':state.solved.length>=5,'graduate':state.campaign.length>=8};state.badges=[...new Set([...(state.badges||[]),...badgeList.filter(b=>checks[b[0]]).map(b=>b[0])])]}
 function renderAchievements(){const root=$('#achievements');if(!root)return;root.innerHTML=badgeList.map(b=>'<div class="achievement '+(state.badges.includes(b[0])?'earned':'')+'"><b>'+b[1]+' '+safe(b[2])+'</b><span>'+safe(b[3])+'</span><div class="muted">'+(state.badges.includes(b[0])?'UNLOCKED':'LOCKED')+'</div></div>').join('')}
 function renderStats(){$('#statSolved').textContent=state.solved.length;$('#statProjects').textContent=state.projects.length;$('#statBadges').textContent=(state.badges||[]).length}
-function checkChallenge(){const c=selectedChallenge();let ok=false;try{ok=c.test()}catch{}const el=$('#challengeFeedback');el.className='feedback '+(ok?'good':'bad');el.textContent=ok?'PASS — all built-in checks passed. Challenge recorded locally.':'NOT YET — at least one check failed. Re-read the prompt, try an edge case, and check the hint if needed.';if(ok&&!state.solved.includes(c.id)){state.solved.push(c.id);awardBadges();persist();renderChallengeList()}}
+function checkChallenge(){
+ const c=selectedChallenge(),source=$('#source').value,el=$('#challengeFeedback');
+ const tests={
+ hello:'return __logs.includes("Hello, world!");',
+ sum:'if(typeof add!=="function")return false;return add(2,3)===5&&add(-4,10)===6&&add(0,0)===0;',
+ even:'if(typeof isEven!=="function")return false;return isEven(4)===true&&isEven(7)===false&&isEven(0)===true&&isEven(-2)===true;',
+ largest:'if(typeof largest!=="function")return false;return largest(8,3)===8&&largest(-4,2)===2&&largest(6,6)===6;',
+ array:'if(typeof sumArray!=="function")return false;return sumArray([1,2,3,4])===10&&sumArray([])===0&&sumArray([-2,2,5])===5;',
+ palindrome:'if(typeof isPalindrome!=="function")return false;return isPalindrome("Never odd or even")===true&&isPalindrome("Race car")===true&&isPalindrome("hello")===false;',
+ counter:'if(typeof countVowels!=="function")return false;return countVowels("RetroScript")===3&&countVowels("AEIOU")===5&&countVowels("rhythm")===0;',
+ unique:'if(typeof uniqueValues!=="function")return false;return JSON.stringify(uniqueValues([1,2,1,3,2]))===JSON.stringify([1,2,3])&&JSON.stringify(uniqueValues([]))==="[]";'
+ };
+ const test=tests[c.id];if(!test){el.className='feedback bad';el.textContent='No test available for this challenge yet.';return}
+ el.className='feedback';el.textContent='Running tests in an isolated sandbox…';
+ const frame=document.createElement('iframe');frame.sandbox='allow-scripts';frame.style.display='none';
+ const code=JSON.stringify(source).replace(/</g,'\\u003c'),check=JSON.stringify(test);
+ frame.srcdoc='<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' \'unsafe-eval\'; connect-src \'none\'; img-src data:"><script>const send=(ok,message)=>parent.postMessage({channel:"rsa-challenge-check",ok,message},"*");const __logs=[];const __console={log:(...a)=>__logs.push(a.map(x=>typeof x==="string"?x:String(x)).join(" ")),warn:()=>{},error:()=>{}};try{const __run=Function("console","__logs",'+code+'+"\\n;"+'+check+');const __result=__run(__console,__logs);send(__result===true,__result===true?"All checks passed.":"One or more checks failed.")}catch(e){send(false,e.name+": "+e.message)}'+'<'+ '/script>';
+ let finished=false;const listener=e=>{if(e.source!==frame.contentWindow||!e.data||e.data.channel!=='rsa-challenge-check')return;finished=true;window.removeEventListener('message',listener);frame.remove();finish(!!e.data.ok,e.data.message)};
+ function finish(ok,message){el.className='feedback '+(ok?'good':'bad');el.textContent=ok?'PASS — all built-in checks passed. Challenge recorded locally.':('NOT YET — '+(message||'At least one check failed.')+' Re-read the prompt and try an edge case.');if(ok&&!state.solved.includes(c.id)){state.solved.push(c.id);awardBadges();persist();renderChallengeList()}}
+ window.addEventListener('message',listener);document.body.appendChild(frame);
+ setTimeout(()=>{if(!finished){window.removeEventListener('message',listener);frame.remove();finish(false,'The sandbox did not finish in time. Check for an infinite loop or syntax error.')}},900);
+}
 function checkBug(){const b=bugs[Number($('#bugSelect').value)||0];const ok=b.check();const el=$('#bugFeedback');el.className='feedback '+(ok?'good':'bad');el.textContent=ok?'FIX VERIFIED — '+b.fix+' Mission recorded.':'BUG STILL PRESENT — '+b.fix+' Run your corrected JavaScript to check for syntax errors.';if(ok&&!state.bugs.includes(b.id)){state.bugs.push(b.id);awardBadges();persist()}}
 function renderAll(){renderStats();renderChallengeList();renderBugs();renderProjects();renderSavedProjects();renderCampaign();renderAchievements()}
 $('#language').addEventListener('change',loadStarter);$('#projectName').addEventListener('input',()=>{$('#fileLabel').textContent=fileName()});$('#source').addEventListener('input',()=>$('#sourceStatus').textContent='Unsaved changes');$('#runCode').addEventListener('click',()=>{runJs();state.ran=true;awardBadges();persist()});$('#saveProject').addEventListener('click',saveProject);$('#downloadFile').addEventListener('click',()=>download(fileName(),$('#source').value));$('#resetCode').addEventListener('click',loadStarter);$('#clearOutput').addEventListener('click',()=>setOutput(''));$('#source').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();if(currentLang()==='javascript')$('#runCode').click()}});
