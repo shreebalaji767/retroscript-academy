@@ -477,5 +477,78 @@ for(const course of languageAtlas) lessons[course.id]=makeAtlasLessons(course);
 const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a file','Lists files and folders','Changes the current folder','Renames a drive'],a:1,why:'DIR displays a directory listing.'},{q:'Which JavaScript keyword is commonly used for a binding you do not reassign?',o:['const','repeat','define','dim'],a:0,why:'const prevents reassignment of that binding, though objects assigned to it can still be mutated.'},{q:'What is a .BAT file?',o:['An image format','A batch script containing commands','A database','A browser extension'],a:1,why:'Batch files contain commands interpreted by Windows Command Prompt.'},{q:'Which command prints the current working directory in many Unix-like shells?',o:['DIR','PWD','WHERE','TYPE'],a:1,why:'pwd stands for print working directory.'},{q:'Can GitHub Pages execute a VBScript file on its server?',o:['Yes, automatically','Only with HTML','No, it serves static files','Only on weekends'],a:2,why:'GitHub Pages serves static content; VBScript needs a compatible Windows host.'},{q:'What does console.log() do in JavaScript?',o:['Prints a message to the console','Deletes variables','Starts a web server','Creates an HTML file'],a:0,why:'console.log writes values to the developer console or a redirected console implementation.'}];let qi=0,score=0,answered=false;function renderQuiz(){const q=questions[qi%questions.length];answered=false;$('#quizCount').textContent='Question '+(qi+1);$('#quizScore').textContent='Score: '+score;$('#quizQuestion').textContent=q.q;$('#quizFeedback').textContent='';$('#quizOptions').innerHTML=q.o.map((o,i)=>'<button class="quiz-option" data-answer="'+i+'">'+String.fromCharCode(65+i)+'. '+safeText(o)+'</button>').join('');$('#quizOptions').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(answered)return;answered=true;const correct=Number(b.dataset.answer)===q.a;if(correct)score++;$('#quizScore').textContent='Score: '+score;$('#quizOptions').querySelectorAll('button').forEach(x=>{if(Number(x.dataset.answer)===q.a)x.classList.add('correct')});if(!correct)b.classList.add('wrong');$('#quizFeedback').textContent=(correct?'Correct! ':'Not quite. ')+q.why})}$('#nextQuestion').onclick=()=>{qi++;renderQuiz()};$('#clearProgress').onclick=()=>{if(confirm('Reset locally saved course progress?')){setProgress([]);updateProgress()}};renderCourses();renderLesson();updateProgress();renderQuiz();
 </script>
 
-<script>(function(){const route='courses.html';const bootLanding=document.querySelector('.boot-landing');if(bootLanding)bootLanding.hidden=true;const page={ids:["courses","lesson"],title:'Courses & Lessons'};document.querySelectorAll('main.shell > section').forEach(section=>{section.hidden=!page.ids.includes(section.id)});document.querySelectorAll('.topbar').forEach(el=>el.hidden=false);const footer=document.querySelector('.footer');if(footer)footer.hidden=false;document.title=page.title+' — RetroScript Academy';const main=document.querySelector('main.shell');if(main)main.classList.add('route-main');document.body.classList.add('route-app');document.querySelectorAll('#navlinks a').forEach(a=>{if(new URL(a.href,location.href).pathname===location.pathname)a.setAttribute('aria-current','page')})})();</script>
+<script>
+(function(){
+  'use strict';
+  const route=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const pages={
+    'index.html':{ids:[],title:'Welcome'},
+    'courses.html':{ids:['courses','lesson'],title:'Courses & Lessons'},
+    'labs.html':{ids:['lab','real-labs','playground'],title:'Real Labs'},
+    'practice.html':{ids:['practice'],title:'Practice & Quizzes'},
+    'reference.html':{ids:['reference'],title:'Reference Library'}
+  };
+  const isHome=route==='index.html'||route==='';
+  const page=pages[route]||pages['index.html'];
+  const landing=document.querySelector('.boot-landing');
+  if(landing) landing.hidden=!isHome;
+  document.querySelectorAll('main.shell > section').forEach(section=>{
+    section.hidden=isHome||!page.ids.includes(section.id);
+  });
+  document.querySelectorAll('.topbar').forEach(el=>{el.hidden=isHome});
+  const footer=document.querySelector('.footer');
+  if(footer) footer.hidden=isHome;
+  document.title=page.title+' — RetroScript Academy';
+  const main=document.querySelector('main.shell');
+  if(main) main.classList.toggle('route-main',!isHome);
+  document.body.classList.toggle('route-app',!isHome);
+
+  const nav=document.getElementById('navlinks');
+  const menu=document.getElementById('menuToggle');
+  function closeMenu(){
+    if(nav) nav.classList.remove('open');
+    if(menu) menu.setAttribute('aria-expanded','false');
+  }
+  if(menu&&nav){
+    menu.setAttribute('aria-controls','navlinks');
+    menu.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false');
+    menu.onclick=()=>{
+      const open=nav.classList.toggle('open');
+      menu.setAttribute('aria-expanded',String(open));
+    };
+    nav.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click',closeMenu);
+      try{
+        const target=new URL(a.href,location.href);
+        if(target.pathname===location.pathname&&(!target.hash||target.hash===location.hash)){
+          a.setAttribute('aria-current','page');
+        }else{
+          a.removeAttribute('aria-current');
+        }
+      }catch{}
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape') closeMenu();
+    });
+  }
+
+  // The welcome screen advertises Enter as a shortcut; make that shortcut work.
+  if(isHome){
+    document.addEventListener('keydown',event=>{
+      const target=event.target;
+      const typing=target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(target.tagName));
+      if(event.key==='Enter'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!typing){
+        location.href='./courses.html';
+      }
+    });
+  }else if(location.hash){
+    // Ensure hash navigation works after route sections are unhidden.
+    const targetId=decodeURIComponent(location.hash.slice(1));
+    const target=document.getElementById(targetId);
+    if(target&&!target.hidden){
+      requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+    }
+  }
+})();
+</script>
 </body></html>
