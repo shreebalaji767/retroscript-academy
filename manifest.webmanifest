@@ -1,0 +1,18 @@
+{
+  "name": "RetroScript Academy Code Studio",
+  "short_name": "RetroScript",
+  "start_url": "./studio.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080d18",
+  "theme_color": "#111827",
+  "description": "Free offline-friendly retro programming studio.",
+  "icons": [
+    {
+      "src": "./retroscript-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
