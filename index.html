@@ -119,6 +119,15 @@ img,svg,video,canvas{max-width:100%}pre{max-width:100%;overflow-x:auto;overscrol
 
 
 .route-main{min-height:70vh}.topbar[hidden],main section[hidden],.footer[hidden]{display:none!important}.navlinks a[aria-current="page"]{background:#ffff00!important;color:#000!important;outline:2px dotted #000;outline-offset:1px}.brand:focus-visible,.navlinks a:focus-visible{outline:3px solid #ffff00;outline-offset:3px}
+
+/* App-like layout: keep the browser viewport fixed and scroll only inside the active page content. */
+body.route-app{height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column}
+body.route-app .topbar{flex:0 0 auto}
+body.route-app main.route-main{flex:1 1 auto;min-height:0;height:auto;overflow-y:auto;overscroll-behavior:contain;padding-bottom:24px}
+body.route-app .footer{display:none!important}
+body.route-app main.route-main>section:not([hidden]){margin-bottom:0}
+.boot-landing{min-height:100vh;min-height:100svh}
+@media(max-height:760px){.boot-content{padding-top:clamp(10px,2.2vh,24px);padding-bottom:clamp(10px,2.2vh,24px)}.boot-logo{width:clamp(48px,9vh,78px);margin-bottom:8px}.boot-kicker{margin:8px 0}.boot-content h1{font-size:clamp(1.7rem,6vh,3.5rem);margin:8px 0}.boot-description{line-height:1.45;margin:8px 0}.boot-facts{margin:10px 0}.boot-footnote{margin-top:10px}}
 </style>
 </head>
 <body>
@@ -487,6 +496,7 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
  document.title=page.title+' — RetroScript Academy';
  const main=document.querySelector('main.shell');
  if(main) main.classList.toggle('route-main',route!=='index.html');
+ document.body.classList.toggle('route-app',route!=='index.html');
  document.querySelectorAll('#navlinks a').forEach(a=>{
    if(new URL(a.href,location.href).pathname===location.pathname){
      a.setAttribute('aria-current','page');
