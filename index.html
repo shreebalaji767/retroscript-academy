@@ -99,9 +99,42 @@ img,svg,video,canvas{max-width:100%}pre{max-width:100%;overflow-x:auto;overscrol
 @media(max-width:420px){.shell{padding-left:8px;padding-right:8px}.nav{gap:6px}.brand{font-size:.78rem;letter-spacing:0;max-width:calc(100% - 78px);gap:6px}.brand img{width:30px;height:30px}.menu-toggle{font-size:.75rem;padding:6px}.navlinks.open{grid-template-columns:1fr 1fr}.landing-stamp{gap:8px}.landing-stamp img{width:48px;height:48px}.landing-stamp small{font-size:.55rem}.landing-page h1{font-size:clamp(2rem,9vw,2.7rem);letter-spacing:-.04em}.lead{font-size:1rem}.terminal{font-size:.75rem}.sidebar{grid-template-columns:1fr}.toolbar>*{min-width:0}.search{min-width:0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
 
+
+/* Dedicated first-screen retro landing page: intentionally visible on initial page load. */
+.boot-landing{min-height:100vh;min-height:100svh;padding:clamp(12px,3vw,34px);display:grid;place-items:center;background:#008080;background-image:linear-gradient(135deg,#008080 0%,#005858 48%,#003333 100%);color:#fff;font-family:ui-monospace,Consolas,"Courier New",monospace}
+.boot-frame{width:min(100%,920px);background:#c0c0c0;color:#000;border:4px ridge #fff;box-shadow:12px 12px 0 #002b2b;min-width:0}
+.boot-titlebar{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;padding:9px 12px;background:#000080;color:#fff;font-weight:900;font-size:clamp(.72rem,2vw,.95rem)}
+.boot-lights{color:#ffff00;white-space:nowrap}.boot-version{color:#baffba}
+.boot-content{text-align:center;padding:clamp(22px,6vw,58px) clamp(12px,4vw,34px);background:#000;color:#00ff66;border:3px inset #808080;margin:8px;overflow-wrap:anywhere}
+.boot-logo{display:block;width:clamp(72px,14vw,112px);height:auto;margin:0 auto 18px;image-rendering:pixelated;border:3px ridge #fff;background:#c0c0c0}
+.boot-kicker{color:#ffff00;font-weight:900;letter-spacing:.08em;font-size:clamp(.7rem,2vw,.95rem)}
+.boot-content h1{font-size:clamp(2rem,7.4vw,5.4rem);line-height:1.05;letter-spacing:.02em;margin:18px 0;color:#fff;text-shadow:4px 4px #000080;overflow-wrap:anywhere}
+.boot-content h1 span{color:#ffff00}.boot-description{font-size:clamp(.85rem,2.3vw,1.12rem);line-height:1.8;color:#baffba}
+.boot-facts{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:22px 0}.boot-facts span{background:#000080;color:#ffff00;padding:6px 9px;border:2px outset #fff;font-size:clamp(.65rem,1.7vw,.82rem)}
+.boot-enter{display:inline-block;margin:8px auto 10px;padding:14px clamp(14px,4vw,32px);background:#c0c0c0;color:#000;border:4px outset #fff;font-weight:1000;font-size:clamp(.9rem,2.8vw,1.25rem);text-decoration:none;box-shadow:4px 4px 0 #008000}
+.boot-enter:hover,.boot-enter:focus{background:#ffff00;outline:3px solid #00ff66;outline-offset:3px}.boot-footnote{margin:26px 0 0;color:#aaa;font-size:clamp(.6rem,1.6vw,.78rem);line-height:1.8}
+.boot-status{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:9px 12px;background:#c0c0c0;color:#000;font-size:clamp(.62rem,1.7vw,.8rem);font-weight:900}
+@media(max-width:480px){.boot-landing{padding:8px}.boot-frame{box-shadow:5px 5px 0 #002b2b}.boot-content{margin:5px;padding:22px 10px}.boot-status{justify-content:center;text-align:center}.boot-content h1{letter-spacing:0}.boot-description br{display:none}}
+@media(prefers-reduced-motion:reduce){.boot-landing *{scroll-behavior:auto}}
+
 </style>
 </head>
 <body>
+<section class="boot-landing" id="landing" aria-labelledby="landingTitle">
+  <div class="boot-frame">
+    <div class="boot-titlebar"><span class="boot-lights">■ ■ ■</span><span>RETROSCRIPT.EXE — WELCOME</span><span class="boot-version">v1.0</span></div>
+    <div class="boot-content">
+      <img class="boot-logo" src="./retroscript-logo.svg" alt="RetroScript Academy pixel computer logo" width="112" height="112">
+      <p class="boot-kicker">★ FREE RETRO PROGRAMMING ACADEMY ★</p>
+      <h1 id="landingTitle">WELCOME TO<br><span>RETROSCRIPT</span><br>ACADEMY_</h1>
+      <p class="boot-description">Learn scripting from LEVEL ZERO to ADVANCED.<br>Classic computer style. Real lessons. Real code. Real labs.</p>
+      <div class="boot-facts"><span>[ NO FEES ]</span><span>[ NO ACCOUNT ]</span><span>[ OPEN SOURCE ]</span></div>
+      <a class="boot-enter" href="#home">▶ ENTER THE ACADEMY</a>
+      <p class="boot-footnote">DOS · BATCH · JAVASCRIPT · POWERSHELL · PYTHON · AND MORE</p>
+    </div>
+    <div class="boot-status"><span>STATUS: READY</span><span>PRESS ENTER TO CONTINUE →</span></div>
+  </div>
+</section>
 <a class="skip-link" href="#courses">Skip to courses</a><header class="topbar"><div class="shell nav"><a class="brand" href="#home" aria-label="RetroScript Academy home"><img src="./retroscript-logo.svg" alt="" width="42" height="42"> <span class="brandword">RETRO<span>SCRIPT</span>_ACADEMY</span></a><button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰ MENU</button><nav class="navlinks" id="navlinks"><a href="#courses">Courses</a><a href="#lab">DOS Lab</a><a href="#playground">JS Lab</a><a href="#practice">Practice</a><a href="#reference">Reference</a></nav></div></header>
 <main class="shell">
 <section class="hero landing-page" id="home"><div class="landing-copy"><div class="landing-stamp"><img src="./retroscript-logo.svg" alt="RetroScript Academy retro computer logo" width="76" height="76"><span><strong>RETROSCRIPT ACADEMY</strong><small>FREE COMPUTER LEARNING SYSTEM · EST. 1995*</small></span></div><div class="eyebrow">● Free learning system // build 1.0</div><h1>Boot up your brain.<br>Learn the <em>language</em><br>of computers.</h1><p class="lead">A retro-style scripting academy for curious beginners. Learn classic and modern languages from level zero to advanced—with real lessons, source code, and practical labs.</p><div class="actions"><a class="btn primary" href="#courses">▶ START LEARNING</a><a class="btn" href="#real-labs">OPEN REAL LABS</a></div><div class="status"><span>✓ FREE FOREVER</span><span>✓ NO ACCOUNT</span><span>✓ PHONE · TABLET · DESKTOP</span><span>✓ REAL CODE &amp; RESULTS</span></div></div><div class="window"><div class="windowbar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="windowtitle">C:\RETROSCRIPT\WELCOME.EXE</span></div><div class="terminal"><div class="dim">RETROSCRIPT ACADEMY [Version 1.0]</div><br><div>Booting learning environment...</div><div class="cyan">Loading course catalog ........ OK</div><div class="cyan">Loading practice labs .......... OK</div><div class="cyan">Checking learner progress ...... OK</div><br><div class="amber">Welcome, future script author.</div><div>Type <span class="cyan">HELP</span> to begin.</div><br><div class="dim">C:\LEARN&gt; <span style="animation:blink 1s steps(2,start) infinite">_</span></div></div></div></section>
