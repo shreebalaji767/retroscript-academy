@@ -657,7 +657,7 @@ function run(withTests){
  frame.sandbox='allow-scripts';
  frame.style.display='none';
  const channel='rsa-hardcore-result';
- const payload={code:editor.value,tests:withTests?tests.value:'',withTests,inputs:($('#ideProgramInput')?.value||'').split('\\n')};
+ const payload={code:editor.value,tests:withTests?tests.value:'',withTests,inputs:($('#ideProgramInput')?.value||'').split('\n')};
  const sandboxRunner=function(){
   window.addEventListener('message',async function(event){
    const p=event.data;
