@@ -84,6 +84,27 @@ pre code{color:#00ff00}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:22px}.nav{flex-wrap:wrap;padding:7px 0}.navlinks{background:#000080;padding:5px}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.shell{padding:0 8px}.hero{padding-top:18px}.section{padding:20px 0}.grid{grid-template-columns:1fr}.sidebar{grid-template-columns:1fr 1fr}.terminal{padding:11px}.section-head{align-items:start}.navlinks a,.navlinks button{padding:5px;font-size:.78rem}}
 
+/* FULL PRACTICAL WORKBENCH */
+.full-workbench{margin-top:18px;padding:18px!important;border:3px ridge #fff!important;background:#d4d0c8!important;box-shadow:3px 3px #404040!important}
+.workbench-toolbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin:12px 0}
+.workbench-search{display:block;min-width:0;font:700 .75rem "Courier New",monospace;color:#000080}
+.workbench-search span{display:block;margin-bottom:6px}
+.workbench-search .field{margin:0}
+.mission-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.mission-card{min-width:0;border:3px ridge #fff;background:#c0c0c0;padding:14px;box-shadow:2px 2px #404040}
+.mission-card h3{margin:10px 0 6px;color:#000080}
+.mission-card p,.mission-card li{color:#222}
+.mission-card ol{padding-left:22px}
+.mission-card li{margin:0 0 8px}
+.mission-checks{display:grid;gap:7px;margin:14px 0}
+.mission-check{display:flex;align-items:flex-start;gap:8px;padding:8px;border:1px solid #808080;background:#d4d0c8}
+.mission-check input{width:18px;height:18px;flex:0 0 auto;margin:1px 0}
+.mission-notes-label{display:block;font-size:.78rem;font-weight:bold;margin:12px 0 6px;color:#000080}
+#labNotes{min-height:90px;resize:vertical}
+.lab-run-output{min-height:160px;max-height:360px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#000;color:#00ff00;border:3px inset #808080;padding:12px;font:14px/1.5 "Courier New",monospace}
+#runLabJs:disabled{opacity:.55;cursor:not-allowed}
+#workspaceStatus{min-height:1.5em}
+@media(max-width:760px){.workbench-toolbar,.mission-layout{grid-template-columns:1fr}.full-workbench{padding:10px!important}.mission-card{padding:10px}.labbench{grid-template-columns:1fr}}
 /* Practical lab bench: restrained terminal-era styling, not a simulated OS. */
 .labbench{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:24px;border:2px solid var(--line);border-radius:0!important;box-shadow:none!important;background:var(--panel)!important}
 .lab-controls,.lab-instructions{min-width:0}.lab-controls label{display:block;font:700 .78rem ui-monospace,monospace;letter-spacing:.06em;color:var(--green);margin:0 0 8px}.lab-controls select,.lab-controls textarea{width:100%;background:#050807;color:#b6ffb6;border:1px solid #64815f;border-radius:0;padding:12px;font:14px/1.55 ui-monospace,monospace;margin-bottom:14px}.lab-controls textarea{resize:vertical;min-height:240px;white-space:pre;tab-size:4}.lab-instructions h3,.lab-instructions h4{font-family:ui-monospace,monospace;color:var(--amber)}.lab-instructions li{margin:0 0 10px}.lab-count{margin-top:10px}.labbench .note{border-left:3px solid var(--amber);border-radius:0}
@@ -176,7 +197,35 @@ WScript.Echo("Hello from Windows Script Host");</code></pre><p>Use only a machin
 <article class="card"><div class="tag">PYTHON · PHP · OTHER LANGUAGES</div><h3>Install the correct runtime</h3><p>Python scripts need Python; PHP scripts need PHP; Perl, Ruby, Lua and Tcl each have their own runtimes. Static hosting publishes teaching materials but does not install or execute those runtimes for you.</p><p>Each course explains how to save a source file, run it locally, interpret the result, and troubleshoot common errors.</p></article>
 </div><div class="note"><strong>Important:</strong> GitHub Pages hosts static files only. This site provides actual teaching and a real browser JavaScript runner; it cannot execute DOS, Batch, PowerShell, VBScript, Bash, Python or PHP on GitHub's server. Follow the setup steps to run those languages in their real environments.</div></section>
 
-<section class="section" id="real-labs"><div class="section-head"><div><div class="eyebrow">REAL LAB BENCH / NO FAKE OUTPUT</div><h2>Real language labs</h2><p>Choose any course to get its actual starter source, a file you can download, and instructions for running it with the language's real runtime. Browser-only execution is not falsely claimed for languages that need an installed host.</p></div></div><div class="contentpanel labbench"><div class="lab-controls"><label for="labLanguage">LANGUAGE / RUNTIME</label><select id="labLanguage"></select><label for="labSource">STARTER SOURCE — EDIT BEFORE DOWNLOADING</label><textarea id="labSource" spellcheck="false" rows="12"></textarea><div class="actions"><button class="btn primary" id="downloadLab">Download source file</button><button class="btn" id="resetLab">Restore starter</button><button class="btn" id="copyLab">Copy source</button></div></div><div class="lab-instructions"><div class="tag" id="labTag">REAL RUNTIME</div><h3 id="labTitle">Choose a language</h3><p id="labDesc"></p><h4>Run it for real</h4><ol id="labSteps"></ol><p><a id="labDocs" href="https://www.google.com/search?q=official+language+documentation" target="_blank" rel="noopener noreferrer">Open official documentation ↗</a></p><div class="note"><strong>Honest runtime status:</strong> downloading source is real; the source is not executed by this static page. Run it in the actual interpreter, shell, application or database engine shown here. Browser security and GitHub Pages do not provide every legacy runtime.</div></div></div><div class="small lab-count" id="labCount"></div></section>
+<section class="section" id="real-labs"><div class="section-head"><div><div class="eyebrow">REAL LAB BENCH / NO FAKE OUTPUT</div><h2>Real language labs</h2><p>Choose any course to get its actual starter source, a file you can download, and instructions for running it with the language's real runtime. Browser-only execution is not falsely claimed for languages that need an installed host.</p></div></div><div class="contentpanel labbench"><div class="lab-controls"><label for="labLanguage">LANGUAGE / RUNTIME</label><select id="labLanguage"></select><label for="labSource">STARTER SOURCE — EDIT BEFORE DOWNLOADING</label><textarea id="labSource" spellcheck="false" rows="12"></textarea><div class="actions"><button class="btn primary" id="downloadLab">Download source file</button><button class="btn" id="resetLab">Restore starter</button><button class="btn" id="copyLab">Copy source</button></div></div><div class="lab-instructions"><div class="tag" id="labTag">REAL RUNTIME</div><h3 id="labTitle">Choose a language</h3><p id="labDesc"></p><h4>Run it for real</h4><ol id="labSteps"></ol><p><a id="labDocs" href="https://www.google.com/search?q=official+language+documentation" target="_blank" rel="noopener noreferrer">Open official documentation ↗</a></p><div class="note"><strong>Honest runtime status:</strong> downloading source is real; the source is not executed by this static page. Run it in the actual interpreter, shell, application or database engine shown here. Browser security and GitHub Pages do not provide every legacy runtime.</div></div></div><div class="small lab-count" id="labCount"></div>
+<div class="contentpanel full-workbench" id="fullWorkbench">
+  <div class="section-head"><div><div class="eyebrow">Hands-on mission control</div><h3>Practice missions & workspace</h3><p>Choose a language above, edit real source, save it on this device, and work through practical tasks. Only JavaScript has an in-browser runner here; other code is downloaded for its real runtime.</p></div></div>
+  <div class="workbench-toolbar">
+    <label class="workbench-search"><span>FIND A LANGUAGE</span><input class="field" id="labSearch" type="search" placeholder="Search 100+ language tracks…"></label>
+    <label class="workbench-search"><span>MISSION</span><select class="field" id="labMission"></select></label>
+  </div>
+  <div class="mission-layout">
+    <section class="mission-card">
+      <div class="tag" id="missionLevel">MISSION 01</div>
+      <h3 id="missionTitle">Make the starter your own</h3>
+      <p id="missionBrief">Edit the source, save it, and test it in the correct runtime.</p>
+      <ol id="missionSteps"></ol>
+      <div class="mission-checks" id="missionChecks"></div>
+      <label class="mission-notes-label" for="labNotes">YOUR NOTES / ERRORS / RESULTS</label>
+      <textarea id="labNotes" class="field" rows="4" placeholder="Record what happened in the real runtime, including error messages…"></textarea>
+      <div class="actions"><button class="btn primary" id="saveWorkspace">Save workspace on this device</button><button class="btn" id="clearWorkspace">Clear saved workspace</button></div>
+      <p class="small" id="workspaceStatus" role="status">Workspace is not saved yet.</p>
+    </section>
+    <section class="mission-card">
+      <div class="tag">REAL EXECUTION</div>
+      <h3>Run JavaScript here</h3>
+      <p id="inlineRunHint">Select the JavaScript language track to enable the isolated browser runner. Other languages are never shown fake output.</p>
+      <div class="actions"><button class="btn primary" id="runLabJs" disabled>▶ Run current JavaScript</button><button class="btn" id="clearLabOutput">Clear output</button></div>
+      <pre class="lab-run-output" id="labRunOutput" aria-live="polite">Output appears here when JavaScript is selected and run.</pre>
+      <div class="note">The runner is for small learning snippets. It uses a sandboxed iframe with network access blocked. Browser JavaScript is not Node.js and cannot run operating-system commands. Never paste code you do not understand.</div>
+    </section>
+  </div>
+</div></section>
 <section class="section" id="playground"><div class="section-head"><div><div class="eyebrow">Code workshop / JavaScript</div><h2>Run your first JavaScript</h2><p>Runs locally in a restricted iframe with no network access or parent-page access.</p></div><button class="btn" id="resetJs">Reset example</button></div><div class="playground"><div><label for="jsCode" class="small">EDITABLE SOURCE</label><textarea id="jsCode" spellcheck="false">const name = "learner";
 console.log("Hello, " + name + "!");
 
@@ -294,7 +343,62 @@ function labFileName(c){const n=c.name.toLowerCase();const map={javascript:'hell
 function labStarter(c){if(c.sample)return c.sample;const ls=lessons[c.id]||[];for(const l of ls){const m=l.body&&l.body.match(/<pre><code>([\s\S]*?)<\/code><\/pre>/);if(m){const el=document.createElement('textarea');el.innerHTML=m[1];return el.value}}return '# '+c.name+' starter\n# See course lesson 1 for a first example.'}
 function renderLab(){const selected=labLang.value||courses[0]?.id;const course=courses.find(x=>x.id===selected)||courses[0];if(!course)return;const starter=labStarter(course);if(labSource.dataset.course!==course.id){labSource.value=starter;labSource.dataset.course=course.id}$('#labTitle').textContent=course.name+' — real practice';$('#labTag').textContent=labRuntime(course);$('#labDesc').textContent=course.desc+' Use this starter in the actual runtime; results come from that interpreter or host, not a simulated output panel.';$('#labSteps').innerHTML=labSteps(course).map(x=>'<li>'+safeText(x)+'</li>').join('');const docs=officialDocs[course.name]||'https://www.google.com/search?q='+encodeURIComponent(course.name+' official documentation');$('#labDocs').href=docs;$('#labCount').textContent=courses.length+' language tracks available in this lab bench.'}
 function labSteps(c){const n=c.name,r=labRuntime(c),file=labFileName(c);const windows=['Windows Command Prompt (cmd.exe)','PowerShell','Windows Script Host (legacy)','Microsoft Office VBA editor','Visual Basic 6 IDE (legacy)','AutoHotkey v2','AutoHotkey v1 (legacy)','AutoIt','IIS Classic ASP (legacy)','KiXtart (legacy)'].includes(r);const mac=['macOS Script Editor','macOS osascript -l JavaScript'].includes(r);let steps=['Save the downloaded file as '+file+'.','Open '+r+' on a machine where it is installed and supported.','Run the file using the command or editor for that runtime; read the real output and error messages.','Change one line, run it again, then complete the matching lesson exercise.'];if(c.id==='python')steps[2]='In a terminal, run: python hello.py (or python3 hello.py).';else if(c.id==='node')steps[2]='In a terminal, run: node hello.js.';else if(c.id==='php'||c.id==='php-cli')steps[2]='In a terminal, run: php hello.php.';else if(c.id==='bash')steps[2]='In a POSIX-compatible terminal, run: bash hello.sh.';else if(c.id==='perl')steps[2]='In a terminal with Perl installed, run: perl hello.pl.';else if(c.id==='ruby')steps[2]='In a terminal with Ruby installed, run: ruby hello.rb.';else if(c.id==='lua')steps[2]='In a terminal with Lua installed, run: lua hello.lua.';else if(c.id==='powershell'||c.id==='powershell-version')steps[2]='In PowerShell, run: .\\hello.ps1. If execution policy blocks it, follow your organization’s policy; do not weaken system security just to run a lesson.';else if(c.id==='bash'||c.id==='zsh'||c.id==='ksh'||c.id==='fish')steps[2]='Run the file with the corresponding shell, for example: '+(c.id==='zsh'?'zsh hello.zsh':c.id==='fish'?'fish hello.fish':c.id==='ksh'?'ksh hello.ksh':'bash hello.sh')+'.';else if(mac)steps[2]='Open the file in Script Editor or use the appropriate osascript command on macOS; approve automation permissions only when you understand the requested access.';else if(windows)steps[2]='Open the matching Windows host/editor and run the script there. Legacy runtimes may require a compatible Windows or Office version and may be disabled by policy.';return steps}
-courses.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;labLang.appendChild(o)});labLang.addEventListener('change',()=>{labSource.dataset.course='';renderLab()});$('#resetLab').onclick=()=>{labSource.dataset.course='';renderLab()};$('#downloadLab').onclick=()=>{const c=courses.find(x=>x.id===labLang.value);if(!c)return;const blob=new Blob([labSource.value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=labFileName(c);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('#copyLab').onclick=async()=>{try{await navigator.clipboard.writeText(labSource.value);$('#copyLab').textContent='Copied!';setTimeout(()=>$('#copyLab').textContent='Copy source',1200)}catch(e){labSource.focus();labSource.select();$('#copyLab').textContent='Select and copy'}};renderLab();
+// Hands-on missions: source and notes are saved only in this browser; no backend required.
+const missionBank=[
+ {title:"01 · Understand and run the starter",brief:"Learn the entry point, output method and runtime before changing code.",steps:["Read every line and identify where execution begins.","Change one harmless value or message.","Run it in the actual runtime and record the exact result."],checks:["I can explain the starter code.","I changed at least one value.","I ran it in the correct runtime."]},
+ {title:"02 · Inputs, values and edge cases",brief:"Make the program handle normal, empty and unusual input safely.",steps:["Identify the inputs and their expected types.","Try a normal value and an empty or missing value.","Handle invalid input without crashing or corrupting data."],checks:["I identified the inputs.","I tested a normal case.","I tested an edge case."]},
+ {title:"03 · Decisions and repetition",brief:"Add a decision and a loop using the selected language's real syntax.",steps:["Add an if/else or the language's equivalent.","Repeat an operation over a small, bounded set.","Check the boundary condition so the loop terminates."],checks:["I added a decision.","I added bounded repetition.","I checked the stopping condition."]},
+ {title:"04 · Functions and reusable logic",brief:"Refactor repeated work into a named function, procedure or equivalent.",steps:["Create a reusable function or procedure.","Pass in a value instead of hard-coding everything.","Test at least two different inputs."],checks:["I created reusable logic.","I used an input/parameter.","I tested two inputs."]},
+ {title:"05 · Files and real-world data",brief:"Work with a small test file and protect existing data.",steps:["Create a disposable practice file in a folder you own.","Read and transform the sample data.","Write to a new output file and handle a missing-file error."],checks:["I used test data only.","I handled file errors.","I preserved the original input."]},
+ {title:"06 · Debug, test and document",brief:"Make the script reliable, explain how to run it and verify failure paths.",steps:["Trigger one safe, intentional error and read the message.","Fix the cause and rerun the normal case.","Write the exact runtime version and command used."],checks:["I captured an error message.","I fixed and retested it.","I documented the run command."]}
+];
+const labSearch=$('#labSearch'),labMission=$('#labMission'),labNotes=$('#labNotes'),missionChecks=$('#missionChecks');
+missionBank.forEach((m,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=m.title;labMission.appendChild(o)});
+function workspaceKey(){return 'retroscript-lab-v2:'+labLang.value}
+function renderMission(){
+ const m=missionBank[Number(labMission.value)||0];
+ $('#missionTitle').textContent=m.title;$('#missionBrief').textContent=m.brief;
+ $('#missionLevel').textContent='PRACTICAL TASK '+String((Number(labMission.value)||0)+1).padStart(2,'0');
+ $('#missionSteps').innerHTML=m.steps.map(x=>'<li>'+safeText(x)+'</li>').join('');
+ missionChecks.innerHTML=m.checks.map((x,i)=>'<label class="mission-check"><input type="checkbox" data-check="'+i+'"><span>'+safeText(x)+'</span></label>').join('');
+ loadWorkspace(false);
+}
+function loadWorkspace(showStatus=true){
+ try{const d=JSON.parse(localStorage.getItem(workspaceKey())||'null');if(d){if(typeof d.source==='string'){labSource.value=d.source;labSource.dataset.course=labLang.value}labNotes.value=d.notes||'';missionChecks.querySelectorAll('input').forEach((x,i)=>x.checked=!!(d.checks&&d.checks[i]));if(d.mission!==undefined)labMission.value=String(Math.max(0,Math.min(missionBank.length-1,Number(d.mission)||0)));if(showStatus)$('#workspaceStatus').textContent='Loaded saved work from this browser.';return}}catch(e){}
+ if(showStatus)$('#workspaceStatus').textContent='No saved workspace for this language yet.';
+}
+function saveWorkspace(){
+ const d={source:labSource.value,notes:labNotes.value,mission:Number(labMission.value)||0,checks:[...missionChecks.querySelectorAll('input')].map(x=>x.checked),savedAt:new Date().toISOString()};
+ try{localStorage.setItem(workspaceKey(),JSON.stringify(d));$('#workspaceStatus').textContent='Saved locally on this device. No account or server used.'}catch(e){$('#workspaceStatus').textContent='Could not save locally; use Download source file to keep a copy.'}
+}
+function renderLanguageSearch(){
+ const q=labSearch.value.trim().toLowerCase();let visible=0;
+ [...labLang.options].forEach(o=>{const yes=!q||o.textContent.toLowerCase().includes(q);o.hidden=!yes;if(yes)visible++});
+ if(labLang.selectedOptions[0]?.hidden){const next=[...labLang.options].find(o=>!o.hidden);if(next){labLang.value=next.value;labSource.dataset.course='';renderLab();renderMission()}}
+ $('#labCount').textContent=visible+' matching tracks · '+courses.length+' total language tracks in this lab bench.';
+}
+labSearch.addEventListener('input',renderLanguageSearch);
+labMission.addEventListener('change',renderMission);
+missionChecks.addEventListener('change',()=>$('#workspaceStatus').textContent='Unsaved changes — save workspace to keep them.');
+$('#saveWorkspace').addEventListener('click',saveWorkspace);
+$('#clearWorkspace').addEventListener('click',()=>{try{localStorage.removeItem(workspaceKey())}catch(e){}labNotes.value='';missionChecks.querySelectorAll('input').forEach(x=>x.checked=false);$('#workspaceStatus').textContent='Saved workspace cleared for this language.'});
+labNotes.addEventListener('input',()=>$('#workspaceStatus').textContent='Unsaved notes — save workspace to keep them.');
+labSource.addEventListener('input',()=>$('#workspaceStatus').textContent='Unsaved source changes — save workspace to keep them.');
+$('#clearLabOutput').addEventListener('click',()=>$('#labRunOutput').textContent='');
+function runLabJavaScript(){
+ const c=courses.find(x=>x.id===labLang.value);if(!c||c.id!=='js')return;
+ const output=$('#labRunOutput');output.textContent='Running in isolated browser JavaScript…';
+ const frame=document.createElement('iframe');frame.sandbox='allow-scripts';frame.style.display='none';
+ const escaped=JSON.stringify(labSource.value).replace(/</g,'\\u003c');
+ frame.srcdoc='<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\' \'unsafe-eval\'; connect-src \'none\'; img-src data:; style-src \'unsafe-inline\'"><script>const send=(...a)=>parent.postMessage({type:"rsa-lab-console",data:a.map(x=>{try{return typeof x==="string"?x:JSON.stringify(x)}catch{return String(x)}}).join(" ")},"*");console.log=(...a)=>send(...a);console.error=(...a)=>send("ERROR:",...a);console.warn=(...a)=>send("WARN:",...a);try{(0,Function)("console",'+escaped+')(console)}catch(e){console.error(e.name+": "+e.message)}'+'<'+ '/script>';
+ let lines=[];const listener=e=>{if(e.source===frame.contentWindow&&e.data&&e.data.type==='rsa-lab-console'){lines.push(e.data.data);output.textContent=lines.join('\\n')}};
+ window.addEventListener('message',listener);document.body.appendChild(frame);
+ setTimeout(()=>{window.removeEventListener('message',listener);frame.remove();if(!lines.length)output.textContent='Code finished with no console output.'},500);
+}
+$('#runLabJs').addEventListener('click',runLabJavaScript);
+const originalRenderLab=renderLab;
+renderLab=function(){originalRenderLab();const c=courses.find(x=>x.id===labLang.value);const runnable=!!c&&c.id==='js';$('#runLabJs').disabled=!runnable;$('#inlineRunHint').textContent=runnable?'This is the browser JavaScript engine. Edit the source above, then run it here. Console output and JavaScript errors are real browser-engine results.':'Select JavaScript in the language selector above to enable in-browser execution. For '+(c?c.name:'this language')+', download the source and run it with the actual runtime shown in the instructions.';if(c){try{const d=JSON.parse(localStorage.getItem(workspaceKey())||'null');if(d){if(typeof d.source==='string'&&labSource.dataset.course!==c.id){labSource.value=d.source;labSource.dataset.course=c.id}labNotes.value=d.notes||''}}catch(e){}}};
+courses.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;labLang.appendChild(o)});labLang.addEventListener('change',()=>{labSource.dataset.course='';renderLab();renderMission()});$('#resetLab').onclick=()=>{labSource.dataset.course='';renderLab()};$('#downloadLab').onclick=()=>{const c=courses.find(x=>x.id===labLang.value);if(!c)return;const blob=new Blob([labSource.value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=labFileName(c);document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};$('#copyLab').onclick=async()=>{try{await navigator.clipboard.writeText(labSource.value);$('#copyLab').textContent='Copied!';setTimeout(()=>$('#copyLab').textContent='Copy source',1200)}catch(e){labSource.focus();labSource.select();$('#copyLab').textContent='Select and copy'}};renderLab();renderMission();renderLanguageSearch();
 
 $('#courseSearch').addEventListener('input',renderCourses);$('#levelFilter').addEventListener('change',renderCourses);
 $('#menuToggle').onclick=()=>$('#navlinks').classList.toggle('open');$('#navlinks').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>$('#navlinks').classList.remove('open')));
