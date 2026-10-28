@@ -622,7 +622,7 @@ const questions=[{q:'What does the DOS command DIR usually do?',o:['Deletes a fi
 const $=s=>document.querySelector(s),editor=$('#jsCode'),tests=$('#jsTests'),output=$('#jsOutput'),testOutput=$('#ideTestOutput'),lines=$('#ideLines');
 if(!editor||!tests||!output)return;
 const examples={
-input:{code:'const name = prompt("Enter your name:");\\nconst age = Number(prompt("Enter your age:"));\\nconsole.log("Hello, " + name + "!");\\nconsole.log("Next year you will be " + (age + 1));',tests:'test("input example uses numeric age",()=>assert.equal(Number("20")+1,21));'},
+input:{code:'const name = prompt("Enter your name:");\nconst age = Number(prompt("Enter your age:"));\nconsole.log("Hello, " + name + "!");\nconsole.log("Next year you will be " + (age + 1));',tests:'test("input example uses numeric age",()=>assert.equal(Number("20")+1,21));'},
 starter:{code:'const name = "learner";\nconsole.log("Hello, " + name + "!");\nfor (let i = 1; i <= 3; i++) console.log("Practice line " + i);',tests:'// Add tests: test("addition", () => assert.equal(2 + 3, 5));'},
 binary:{code:'function binarySearch(a, target) {\n let low=0, high=a.length-1;\n while(low<=high){const mid=low+Math.floor((high-low)/2);if(a[mid]===target)return mid;if(a[mid]<target)low=mid+1;else high=mid-1;}\n return -1;\n}\nconsole.log(binarySearch([-8,-2,0,4,9,13],9));',tests:'test("finds middle",()=>assert.equal(binarySearch([1,3,5,7,9],5),2));\ntest("finds boundaries",()=>{assert.equal(binarySearch([1,3,5],1),0);assert.equal(binarySearch([1,3,5],5),2)});\ntest("missing and empty",()=>{assert.equal(binarySearch([1,3,5],4),-1);assert.equal(binarySearch([],4),-1)});'},
 sort:{code:'function mergeSort(a){if(a.length<2)return a.slice();const m=Math.floor(a.length/2),l=mergeSort(a.slice(0,m)),r=mergeSort(a.slice(m)),out=[];let i=0,j=0;while(i<l.length&&j<r.length)out.push(l[i]<=r[j]?l[i++]:r[j++]);return out.concat(l.slice(i),r.slice(j));}\nconsole.log(mergeSort([9,2,7,2,-1,8]));',tests:'test("sorts and preserves duplicates",()=>assert.deepEqual(mergeSort([9,2,7,2,-1,8]),[-1,2,2,7,8,9]));\ntest("does not mutate input",()=>{const a=[3,1,2];mergeSort(a);assert.deepEqual(a,[3,1,2])});\ntest("empty and singleton",()=>{assert.deepEqual(mergeSort([]),[]);assert.deepEqual(mergeSort([4]),[4])});'},
@@ -655,10 +655,10 @@ function run(withTests){
  output.textContent='';
  testOutput.textContent=withTests?'Preparing isolated test run…':'Running in isolated browser JavaScript…';
  const frame=document.createElement('iframe');
- frame.sandbox='allow-scripts';
+ frame.sandbox='allow-scripts allow-modals';
  frame.style.display='none';
  const channel='rsa-hardcore-result';
- const payload={code:editor.value,tests:withTests?tests.value:'',withTests,inputs:($('#ideProgramInput')?.value||'').split('\n')};
+ const payload={code:editor.value,tests:withTests?tests.value:'',withTests,inputs:(($('#ideProgramInput')?.value||'').trim()===''?[]:$('#ideProgramInput').value.split('\n'))};
  const sandboxRunner=function(){
   window.addEventListener('message',async function(event){
    const p=event.data;
